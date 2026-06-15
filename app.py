@@ -107,45 +107,54 @@ except Exception as e:
 
 
 
-# --- AI PREDICTION SECTION ---
+# --- AI STOCK/EXPENSE PREDICTION SECTION ---
 st.divider()
-st.subheader("🤖 AI Expense Forecasting")
+st.subheader("🤖 AI Price/Expense Forecasting")
 
-if st.button("Predict Next Month's Expenses"):
-    if len(df) < 2:
-        st.error("Not enough data! Please add expenses from at least 2 different months to see a trend.")
+if st.button("Predict Next Month's Value"):
+    if len(df) < 5: # Stocks need a bit more data for a trend
+        st.error("Not enough data! Please ensure you have at least 5 rows of history.")
     else:
         try:
-            # Create a copy so we don't mess up the main table
+            # 1. Prepare Data
             temp_df = df.copy()
             
-            # --- FIX FOR THE 'DATE' ERROR ---
-            # This line checks if 'Date' or 'date' exists and renames it to 'Date' for the AI
-            temp_df.columns = [c.capitalize() for c in temp_df.columns]
-            
+            # If 'Date' is hidden in the index (common in yfinance), move it to a column
             if 'Date' not in temp_df.columns:
-                st.error(f"Could not find a date column. Your columns are: {list(df.columns)}")
+                temp_df = temp_df.reset_index()
+            
+            # Standardize column names to Capitalized
+            temp_df.columns = [str(c).capitalize() for c in temp_df.columns]
+            
+            # 2. Identify target column (Use 'Close' for stocks or 'Amount' for expenses)
+            target_col = None
+            for col in ['Close', 'Amount', 'Value']:
+                if col in temp_df.columns:
+                    target_col = col
+                    break
+            
+            if 'Date' not in temp_df.columns or target_col is None:
+                st.error(f"Missing required columns. Found: {list(temp_df.columns)}")
             else:
-                # 1. Data Processing
+                # 3. Process Dates for AI
                 temp_df['Date'] = pd.to_datetime(temp_df['Date'])
-                # Group by Month and Year
-                monthly_df = temp_df.groupby(temp_df['Date'].dt.to_period('M'))['Amount'].sum().reset_index()
-                # Create a number for each month (1, 2, 3...)
+                # Group by date to handle duplicates, then get monthly average/sum
+                monthly_df = temp_df.groupby(temp_df['Date'].dt.to_period('M'))[target_col].mean().reset_index()
                 monthly_df['Month_Number'] = np.arange(len(monthly_df)) + 1
 
-                # 2. ML Training
+                # 4. Train AI Model
                 X = monthly_df[['Month_Number']]
-                y = monthly_df['Amount']
+                y = monthly_df[target_col]
                 model = LinearRegression()
                 model.fit(X, y)
 
-                # 3. Prediction
+                # 5. Predict Next Month
                 next_month_num = monthly_df['Month_Number'].max() + 1
                 prediction = model.predict([[next_month_num]])
 
-                # 4. Show Result
-                st.success(f"### Predicted spending for next month: **${prediction[0]:,.2f}**")
-                st.info("The AI analyzed your monthly trends to calculate this estimate.")
+                # 6. Show Result
+                st.success(f"### Predicted {target_col} for next month: **{prediction[0]:,.2f}**")
+                st.info(f"AI Trend Analysis: Based on your '{target_col}' history, the model projects this future value.")
             
         except Exception as e:
             st.error(f"Error calculating prediction: {e}")
