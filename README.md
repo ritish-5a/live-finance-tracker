@@ -25,6 +25,7 @@ A web application built with Python and Streamlit to track live Stock and Crypto
 - Real-time data fetching
 - Dark mode UI
 
+Built by: RITISH S | 1st Year AIML | Google Cloud GenAl Certified
 
 ### How to run
 ```bash
