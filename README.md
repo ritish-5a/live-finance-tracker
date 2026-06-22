@@ -18,10 +18,12 @@ Real-time NSE/BSE stock market dashboard built with Python. Updates every second
 pip install -r requirements.txt
 streamlit run app.py
 
-# Real-Time Finance Dashboard
+###  **Certified:** Applied concepts from Google Cloud Generative Al
+
+### Real-Time Finance Dashboard
 A web application built with Python and Streamlit to track live Stock and Crypto prices.
 
-## Features
+### Features
 - uses yfinance
 - Interactive Plotly charts
 - Real-time data fetching
