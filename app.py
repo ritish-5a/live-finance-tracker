@@ -158,3 +158,10 @@ if st.button("Predict Next Month's Value"):
             
         except Exception as e:
             st.error(f"Error calculating prediction: {e}")
+
+
+
+st.markdown("---")
+st.markdown("Built by **Ritish S** | [GitHub](https://github.com/ritish-5a/live-finance-tracker) | 1st Year AIML")
+
+
