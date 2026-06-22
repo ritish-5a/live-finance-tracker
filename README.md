@@ -10,15 +10,11 @@ Real-time NSE/BSE stock market dashboard built with Python. Updates every second
 - **Top Movers**: Auto-updating list of Top Gainers & Losers
 - **Zero Lag**: Uses WebSocket streams for instant data
 
+###  **Certified:** Applied concepts from Google Cloud Generative Al
+
 ### Tech Stack
 `Python` `Streamlit` `yfinance` `Plotly` `WebSockets`
 
-### How to run
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-
-###  **Certified:** Applied concepts from Google Cloud Generative Al
 
 ### Real-Time Finance Dashboard
 A web application built with Python and Streamlit to track live Stock and Crypto prices.
@@ -28,3 +24,10 @@ A web application built with Python and Streamlit to track live Stock and Crypto
 - Interactive Plotly charts
 - Real-time data fetching
 - Dark mode UI
+
+
+### How to run
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+
